@@ -49,7 +49,7 @@ Each analysis category uses a specific set of anchors to ensure consistency:
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/yourusername/qscanner.git
+   git clone https://github.com/onglichang/qscanner.git
    cd qscanner
    ```
 
