@@ -4,46 +4,22 @@
 
 ## 🚀 Features
 
-- **Automated Data Sourcing**: Resolves Tickers to SEC CIKs and fetches the latest 10-K filings.
+- **Automated Data Sourcing**: Resolves Tickers to SEC CIKs and fetches filings directly from SEC EDGAR.
 - **Smart Section Extraction**: Isolates key qualitative sections: Item 1 (Business), Item 1A (Risk Factors), and Item 7 (MD&A).
-- **Deep Qualitative Analysis**: Evaluates Durable Competitive Advantage (Moat), Reinvestment Opportunities, Management Capability, and Risk Profile.
-- **Ordinal Rating System**: Provides structured ratings with defined anchors for objective assessment.
+- **Adversarial Multi-Year Analysis**: Tracks business consistency, detects structural decay, and flags management bias across multiple years.
+- **Forensic Quality Assessment**: Evaluates Moat Durability, Strategic Discipline, Risk Escalation, and Capital Allocation Quality.
+- **Throttled SEC Access**: Built-in rate limiting (10 requests/sec) to comply with SEC guidelines.
+- **Rich CLI Experience**: Interactive help, descriptive parameters, and beautiful terminal formatting powered by `rich`.
 
-## ⚖️ Scoring Framework
+## ⚖️ Scoring Framework (Forensic)
 
-Each analysis category uses a specific set of anchors to ensure consistency:
+The multi-year analysis uses a strict burden of proof to classify businesses:
 
-### 🛡️ Durable Competitive Advantages (Moat)
-*Scale: Excellent / Strong / Adequate / Weak / Poor*
-- **Excellent**: Wide moat. Irreplaceable brand, massive network effects, or significant cost advantages. High switching costs.
-- **Strong**: Notable moat. Strong brand recognition or scale advantages. High barriers to entry.
-- **Adequate**: Some advantage. Competitive in its niche, but faces constant pressure.
-- **Weak**: Low advantage. Commodity-like product/service. Price is the primary competition.
-- **Poor**: No advantage. Losing market share or being disrupted by new entrants.
-
-### 💰 Reinvestment Opportunities
-*Scale: Excellent / Strong / Adequate / Weak / Poor*
-- **Excellent**: Abundant high-return opportunities. Can reinvest most cash flow into very high ROIC projects.
-- **Strong**: Consistent high-return opportunities. Significant portion of cash can go into profitable growth.
-- **Adequate**: Moderate opportunities. Can grow with the market, but high-return projects are limited.
-- **Weak**: Few opportunities. Market is saturated; reinvestment mostly for maintenance.
-- **Poor**: No opportunities. Industry is in decline; reinvestment is value-destructive.
-
-### 🧠 Management Capability
-*Scale: Excellent / Strong / Adequate / Weak / Poor*
-- **Excellent**: Visionary and shareholder-aligned. Outstanding capital allocation history. Highly transparent.
-- **Strong**: Capable and aligned. Good strategic execution and sensible capital allocation.
-- **Adequate**: Competent. Follows industry standards, but lacks exceptional vision in capital allocation.
-- **Weak**: Questionable alignment or strategy. Poor capital allocation choices (e.g., expensive M&A).
-- **Poor**: Incompetent or misaligned. History of value destruction or lack of integrity.
-
-### ⚠️ Risk Profile
-*Scale: Minimal / Manageable / Moderate / High / Existential*
-- **Minimal**: Low operational or financial risk. Highly stable environment.
-- **Manageable**: Typical industry risks that are well-mitigated.
-- **Moderate**: Significant risks exist (e.g., regulatory, technological) but are currently under control.
-- **High**: Severe threats to the business model or financial stability.
-- **Existential**: The company faces risks that could lead to insolvency or total disruption.
+- **Pristine**: Clear durable moat, disciplined capital allocation, stable strategy, low risk creep.
+- **High**: Durable business with manageable risks and consistent execution.
+- **Moderate**: Mixed signals, unclear durability, or capital discipline concerns.
+- **Speculative**: Weak moat evidence, strategy drift, elevated risk.
+- **Deteriorating**: Structural decay, capital destruction, increasing operational strain.
 
 ## 🛠 Installation
 
@@ -60,25 +36,39 @@ Each analysis category uses a specific set of anchors to ensure consistency:
 
 ## ⚙️ Configuration
 
-The tool requires two environment variables to be set (ideally in your `~/.zshrc` or `~/.bashrc`):
+The tool requires two environment variables:
 
 ```bash
 # Get your key at https://aistudio.google.com/
 export GEMINI_API_KEY="your_api_key_here"
 
-# The SEC requires a User-Agent header with your contact info for identification
+# The SEC requires a User-Agent header for identification
 export SEC_USER_AGENT="Your Name yourname@email.com"
 ```
 
 ## 📈 Usage
 
-Simply run the tool followed by a stock ticker:
+You can always run `qscanner --help` to see the latest commands and options.
 
+### 1. Check Available History
+See how many years of 10-K filings are available for a ticker:
 ```bash
-qscanner AAPL
+qscanner check-filings MSFT
 ```
 
-The tool will fetch the latest 10-K, extract the relevant sections, and generate a structured qualitative report.
+### 2. Deep Qualitative Analysis (Latest Filing)
+Analyze the most recent 10-K for a single-year snapshot:
+```bash
+qscanner analyze AAPL
+```
+
+### 3. Forensic Multi-Year Analysis
+Analyze consistency and quality over a specified number of years (default is 3):
+```bash
+qscanner multi-analyze GOOGL --years 5
+# or using the short flag
+qscanner multi-analyze GOOGL -y 5
+```
 
 ---
 *Disclaimer: This tool is for educational and research purposes only. It is not financial advice.*

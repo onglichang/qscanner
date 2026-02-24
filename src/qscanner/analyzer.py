@@ -169,3 +169,150 @@ class StockAnalyzer:
             return response.text
         except Exception as e:
             return f"Error during analysis: {str(e)}"
+
+    def analyze_multi_year(self, ticker: str, filings_content: list[dict]) -> str:
+        """
+        Performs a longitudinal analysis across multiple years of filings.
+        filings_content: list of {'date': str, 'business': str, 'mda': str, 'risk': str}
+        """
+        context_parts = []
+        for f in filings_content:
+            part = f"""
+### FILING DATE: {f['date']}
+---
+BUSINESS SECTION (TRUNCATED):
+{f['business'][:15000]}
+
+MANAGEMENT DISCUSSION & ANALYSIS (TRUNCATED):
+{f['mda'][:15000]}
+
+RISK FACTORS (TRUNCATED):
+{f['risk'][:15000]}
+---
+"""
+            context_parts.append(part)
+
+        full_context = "\n".join(context_parts)
+
+        prompt = f"""
+Perform a forensic, adversarial multi-year qualitative analysis of {ticker} across {len(filings_content)} 10-K filings.
+
+Assume management language is partially promotional. Your job is not to summarize, but to detect structural strength OR hidden deterioration.
+
+Your burden of proof standard:
+- A business is NOT high quality unless evidence across multiple years supports durability.
+- If evidence is mixed, default to the lower quality tier.
+- Penalize narrative inflation, strategy drift, risk expansion, and capital misallocation.
+
+---
+
+### ANALYSIS FRAMEWORK
+
+## 1. MOAT DURABILITY TEST
+- Is there clear evidence of durable competitive advantage?
+- Has the description of the moat become more abstract over time?
+- Are competitive threats increasing in frequency or specificity?
+- Is pricing power discussed consistently, or disappearing?
+- Is network effect language backed by concrete metrics?
+
+Flag:
+- Commoditization signals
+- Margin pressure language
+- Reliance on ecosystem buzzwords without operational proof
+
+---
+
+## 2. STRATEGIC DISCIPLINE TEST
+- Is long-term strategy consistent across years?
+- Do capital allocation decisions align with stated strategy?
+- Are acquisitions coherent or opportunistic?
+- Has goodwill or intangible assets grown meaningfully?
+
+Red flags:
+- Frequent pivots
+- Narrative shifts following poor performance
+- “Transformation” language recurring every few years
+- Expansion into unrelated verticals
+
+---
+
+## 3. RISK ESCALATION TEST
+- Compare evolution of risk factors year over year.
+- Are new risks appearing persistently?
+- Are prior risks becoming more severe or detailed?
+- Does tone shift from “may” to “has” or “is experiencing”?
+
+Specifically detect:
+- Regulatory pressure increasing
+- Dependency risk (single product, crypto, major customer)
+- Execution risk becoming operational reality
+
+---
+
+## 4. MANAGEMENT CREDIBILITY TEST
+- Compare past stated goals vs later disclosures.
+- Were previously optimistic initiatives quietly deprioritized?
+- Is adjusted language increasing (non-GAAP emphasis)?
+- Does tone become defensive?
+
+---
+
+## 5. CAPITAL ALLOCATION QUALITY
+- Evidence of disciplined reinvestment?
+- Share dilution trend?
+- Debt increase without proportional strategic gain?
+- SBC growth?
+
+---
+
+## FINAL VERDICT
+
+Classify strictly using:
+
+Pristine → Clear durable moat, disciplined capital allocation, stable strategy, low risk creep
+High → Durable business with manageable risks and consistent execution
+Moderate → Mixed signals, unclear durability, or capital discipline concerns
+Speculative → Weak moat evidence, strategy drift, elevated risk
+Deteriorating → Structural decay, capital destruction, increasing operational strain
+
+Default to the LOWER tier when evidence is ambiguous.
+
+---
+
+{full_context}
+
+---
+
+OUTPUT FORMAT:
+
+# Multi-Year Forensic Analysis: {ticker}
+
+## Moat Durability
+...
+
+## Strategic Discipline
+...
+
+## Risk Escalation
+...
+
+## Management Credibility
+...
+
+## Capital Allocation Quality
+...
+
+## Final Quality Score
+Score: [SCORE]
+Rationale: ...
+"""
+
+        try:
+            # Using a model with a larger context window for multi-year data
+            response = self.client.models.generate_content(
+                model=self.model_id,
+                contents=prompt
+            )
+            return response.text
+        except Exception as e:
+            return f"Error during multi-year analysis: {str(e)}"
