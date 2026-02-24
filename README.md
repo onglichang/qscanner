@@ -1,6 +1,6 @@
 # qscanner 🔍
 
-`qscanner` is a high-performance CLI tool for performing deep qualitative analysis on U.S. stocks. It bypasses expensive financial data providers by pulling directly from the SEC's EDGAR database and uses the latest Gemini AI models to evaluate business quality.
+`qscanner` is a high-performance CLI tool for performing deep qualitative analysis on U.S. stocks. It bypasses expensive financial data providers by pulling directly from the SEC's EDGAR database and uses free/low-cost Gemini AI models to evaluate business quality.
 
 ## 🚀 Features
 
