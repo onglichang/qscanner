@@ -1,0 +1,7 @@
+typer[all]
+requests
+beautifulsoup4
+lxml
+pydantic
+rich
+google-genai

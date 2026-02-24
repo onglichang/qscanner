@@ -1,0 +1,16 @@
+Metadata-Version: 2.4
+Name: qscanner
+Version: 0.1.0
+Summary: A qualitative stock analysis CLI tool
+Author-email: Gemini CLI <gemini-cli@google.com>
+License: MIT
+Description-Content-Type: text/markdown
+Requires-Dist: typer[all]
+Requires-Dist: requests
+Requires-Dist: beautifulsoup4
+Requires-Dist: lxml
+Requires-Dist: pydantic
+Requires-Dist: rich
+Requires-Dist: google-genai
+
+# qscanner
