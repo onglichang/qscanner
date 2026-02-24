@@ -47,5 +47,26 @@ def analyze(ticker: str):
 
     console.print(Panel(report, title=f"Qualitative Analysis: {ticker}", expand=False))
 
+@app.command()
+def check_filings(ticker: str):
+    """
+    Check available 10-K filings for a ticker.
+    """
+    user_agent = os.getenv("SEC_USER_AGENT", "qscanner/1.0 (contact@example.com)")
+    client = SECClient(user_agent)
+    cik = client.get_cik(ticker)
+    if not cik:
+        console.print(f"[red]Ticker {ticker} not found.[/red]")
+        return
+
+    filing_dates = client.get_available_10ks(cik)
+    if not filing_dates:
+        console.print(f"[yellow]No 10-K filings found for {ticker}.[/yellow]")
+        return
+
+    console.print(f"[bold green]Found {len(filing_dates)} years of 10-K filings for {ticker}:[/bold green]")
+    for date in filing_dates:
+        console.print(f" - {date}")
+
 if __name__ == "__main__":
     app()

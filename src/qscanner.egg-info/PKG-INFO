@@ -13,4 +13,87 @@ Requires-Dist: pydantic
 Requires-Dist: rich
 Requires-Dist: google-genai
 
-# qscanner
+# qscanner 🔍
+
+`qscanner` is a high-performance CLI tool for performing deep qualitative analysis on U.S. stocks. It bypasses expensive financial data providers by pulling directly from the SEC's EDGAR database and uses the latest Gemini AI models to evaluate business quality.
+
+## 🚀 Features
+
+- **Automated Data Sourcing**: Resolves Tickers to SEC CIKs and fetches the latest 10-K filings.
+- **Smart Section Extraction**: Isolates key qualitative sections: Item 1 (Business), Item 1A (Risk Factors), and Item 7 (MD&A).
+- **Deep Qualitative Analysis**: Evaluates Durable Competitive Advantage (Moat), Reinvestment Opportunities, Management Capability, and Risk Profile.
+- **Ordinal Rating System**: Provides structured ratings with defined anchors for objective assessment.
+
+## ⚖️ Scoring Framework
+
+Each analysis category uses a specific set of anchors to ensure consistency:
+
+### 🛡️ Durable Competitive Advantages (Moat)
+*Scale: Excellent / Strong / Adequate / Weak / Poor*
+- **Excellent**: Wide moat. Irreplaceable brand, massive network effects, or significant cost advantages. High switching costs.
+- **Strong**: Notable moat. Strong brand recognition or scale advantages. High barriers to entry.
+- **Adequate**: Some advantage. Competitive in its niche, but faces constant pressure.
+- **Weak**: Low advantage. Commodity-like product/service. Price is the primary competition.
+- **Poor**: No advantage. Losing market share or being disrupted by new entrants.
+
+### 💰 Reinvestment Opportunities
+*Scale: Excellent / Strong / Adequate / Weak / Poor*
+- **Excellent**: Abundant high-return opportunities. Can reinvest most cash flow into very high ROIC projects.
+- **Strong**: Consistent high-return opportunities. Significant portion of cash can go into profitable growth.
+- **Adequate**: Moderate opportunities. Can grow with the market, but high-return projects are limited.
+- **Weak**: Few opportunities. Market is saturated; reinvestment mostly for maintenance.
+- **Poor**: No opportunities. Industry is in decline; reinvestment is value-destructive.
+
+### 🧠 Management Capability
+*Scale: Excellent / Strong / Adequate / Weak / Poor*
+- **Excellent**: Visionary and shareholder-aligned. Outstanding capital allocation history. Highly transparent.
+- **Strong**: Capable and aligned. Good strategic execution and sensible capital allocation.
+- **Adequate**: Competent. Follows industry standards, but lacks exceptional vision in capital allocation.
+- **Weak**: Questionable alignment or strategy. Poor capital allocation choices (e.g., expensive M&A).
+- **Poor**: Incompetent or misaligned. History of value destruction or lack of integrity.
+
+### ⚠️ Risk Profile
+*Scale: Minimal / Manageable / Moderate / High / Existential*
+- **Minimal**: Low operational or financial risk. Highly stable environment.
+- **Manageable**: Typical industry risks that are well-mitigated.
+- **Moderate**: Significant risks exist (e.g., regulatory, technological) but are currently under control.
+- **High**: Severe threats to the business model or financial stability.
+- **Existential**: The company faces risks that could lead to insolvency or total disruption.
+
+## 🛠 Installation
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/onglichang/qscanner.git
+   cd qscanner
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   pip install -e .
+   ```
+
+## ⚙️ Configuration
+
+The tool requires two environment variables to be set (ideally in your `~/.zshrc` or `~/.bashrc`):
+
+```bash
+# Get your key at https://aistudio.google.com/
+export GEMINI_API_KEY="your_api_key_here"
+
+# The SEC requires a User-Agent header with your contact info for identification
+export SEC_USER_AGENT="Your Name yourname@email.com"
+```
+
+## 📈 Usage
+
+Simply run the tool followed by a stock ticker:
+
+```bash
+qscanner AAPL
+```
+
+The tool will fetch the latest 10-K, extract the relevant sections, and generate a structured qualitative report.
+
+---
+*Disclaimer: This tool is for educational and research purposes only. It is not financial advice.*

@@ -11,3 +11,4 @@ src/qscanner.egg-info/dependency_links.txt
 src/qscanner.egg-info/entry_points.txt
 src/qscanner.egg-info/requires.txt
 src/qscanner.egg-info/top_level.txt
+tests/test_extraction.py

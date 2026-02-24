@@ -29,6 +29,41 @@ class SECClient:
     def get_cik(self, ticker: str) -> Optional[str]:
         return self.ticker_map.get(ticker.upper())
 
+    def get_available_10ks(self, cik: str) -> list[str]:
+        """Returns a list of filing dates for all available 10-K filings."""
+        submissions_url = f"https://data.sec.gov/submissions/CIK{cik}.json"
+        response = requests.get(submissions_url, headers=self.headers)
+        if response.status_code != 200:
+            return []
+
+        data = response.json()
+        filings = data.get('filings', {})
+        recent_filings = filings.get('recent', {})
+        
+        filing_dates = []
+        
+        def extract_from_dict(d):
+            for i, form in enumerate(d.get('form', [])):
+                if form == '10-K':
+                    filing_dates.append(d['filingDate'][i])
+
+        # Extract from recent
+        extract_from_dict(recent_filings)
+        
+        # Extract from older files if they exist
+        older_files = filings.get('files', [])
+        for file_info in older_files:
+            file_name = file_info.get('name')
+            if file_name:
+                file_url = f"https://data.sec.gov/submissions/{file_name}"
+                file_response = requests.get(file_url, headers=self.headers)
+                if file_response.status_code == 200:
+                    extract_from_dict(file_response.json())
+        
+        # Sort dates descending
+        filing_dates.sort(reverse=True)
+        return filing_dates
+
     def get_latest_10k_url(self, cik: str) -> Optional[str]:
         """Gets the URL for the most recent 10-K filing."""
         submissions_url = f"https://data.sec.gov/submissions/CIK{cik}.json"
